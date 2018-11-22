@@ -2,24 +2,26 @@ lombok-intellij-plugin [![Donate](https://www.paypal.com/en_US/i/btn/btn_donateC
 ======================
 [![Build Status][badge-travis-img]][badge-travis] [![Code Coverage](https://img.shields.io/codecov/c/github/mplushnikov/lombok-intellij-plugin/master.svg)](https://codecov.io/github/mplushnikov/lombok-intellij-plugin?branch=master)
 
-[![Version](http://phpstorm.espend.de/badge/6317/version)](https://plugins.jetbrains.com/plugin/6317)
-[![Downloads](http://phpstorm.espend.de/badge/6317/downloads)](https://plugins.jetbrains.com/plugin/6317)
-[![Downloads last month](http://phpstorm.espend.de/badge/6317/last-month)](https://plugins.jetbrains.com/plugin/6317)
+[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/6317-lombok-plugin.svg)](https://plugins.jetbrains.com/plugin/6317-lombok-plugin)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/6317-lombok-plugin.svg)](https://plugins.jetbrains.com/plugin/6317-lombok-plugin)
+[![Downloads last month](http://phpstorm.espend.de/badge/6317/last-month)](https://plugins.jetbrains.com/plugin/6317-lombok-plugin)
 
 [![Gitter][badge-gitter-img]][badge-gitter] [![Donate][badge-paypal-img]][badge-paypal]
 
 
-## Plugin for [IntelliJ IDEA](http://plugins.jetbrains.com/plugin/6317) to support [Lombok](https://projectlombok.org) annotations. ##
+## Plugin for [IntelliJ IDEA](http://plugins.jetbrains.com/plugin/6317-lombok-plugin) to support [Lombok](https://projectlombok.org) annotations. ##
 
 Provides support for lombok annotations to write great Java code with IntelliJ IDEA.
 
-**Last version (0.16) released on 04.02.2018**
+**Last version (0.22) released on 28.10.2018**
 
-Twenty-third version of plugin released. Contains a lot of bugfixes and some new features!
+Twenty-eight version of plugin released. Contains a lot of bugfixes and some new features!
 
 Install it automatically from IntelliJ Idea plugin repository.
 
-Tested and supports IntelliJ versions: 15.0.6, 2016.3.7, 2017.3.4
+Tested and supports IntelliJ versions: 2016.2, 2016.3, 2017.X, 2018.X
+
+Last support for IntelliJ 15.0.6 and 2016.1 by plugin version 0.19!
 
 Last support for IntelliJ 14.1.7 by plugin version 0.14!
 
@@ -36,7 +38,7 @@ Features / Supports
 - [@ToString](http://projectlombok.org/features/ToString.html)
 - [@EqualsAndHashCode](http://projectlombok.org/features/EqualsAndHashCode.html)
 - [@AllArgsConstructor, @RequiredArgsConstructor and @NoArgsConstructor](http://projectlombok.org/features/Constructor.html)
-- [@Log, @Log4j, @Log4j2, @Slf4j, @XSlf4j, @CommonsLog, @JBossLog](http://projectlombok.org/features/Log.html)
+- [@Log, @Log4j, @Log4j2, @Slf4j, @XSlf4j, @CommonsLog, @JBossLog, @Flogger](http://projectlombok.org/features/Log.html)
 - [@Data](https://projectlombok.org/features/Data.html)
 - [@Builder](https://projectlombok.org/features/Builder.html)
 - [@Singular](https://projectlombok.org/features/Builder.html#singular)
@@ -85,7 +87,7 @@ In your `build.gradle`:
 ```groovy
 // 'compile' can be changed to 'compileOnly' for Gradle 2.12+
 // or 'provided' if using 'propdeps' plugin from SpringSource
-compile "org.projectlombok:lombok:1.16.18"
+compile "org.projectlombok:lombok:1.18.2"
 ```
 
 ##### Maven
@@ -95,7 +97,7 @@ In your `pom.xml`:
 	<dependency>
 		<groupId>org.projectlombok</groupId>
 		<artifactId>lombok</artifactId>
-		<version>1.16.18</version>
+		<version>1.18.2</version>
 		<scope>provided</scope>
 	</dependency>
 </dependencies>
@@ -104,7 +106,7 @@ In your `pom.xml`:
 ##### Ivy
 In your `ivy.xml`:
 ```xml
-<dependency org="org.projectlombok" name="lombok" rev="1.16.18" conf="build" />
+<dependency org="org.projectlombok" name="lombok" rev="1.18.2" conf="build" />
 ```
 
 IntelliJ and Eclipse compiler
@@ -123,10 +125,15 @@ Developed By
 
 **Contributors**
 - [**@akozlova** Anna Kozlova](https://github.com/akozlova)
+- [**@adamarmistead** adamarmistead](https://github.com/adamarmistead)
 - [**@AlexejK** Alexej Kubarev](https://github.com/AlexejK)
 - [**@bulgakovalexander** Alexander Bulgakov](https://github.com/bulgakovalexander)
+- [**@Jessevanbekkum** Jesse van Bekkum](https://github.com/Jessevanbekkum)
+- [**@krzyk** Krzysztof Krasoń](https://github.com/krzyk)
+- [**@Lekanich** Aleksandr Lekanich](https://github.com/Lekanich)
 - [**@mg6maciej** Maciej Górski](https://github.com/mg6maciej)
 - [**@mlueders** Mike Lueders](https://github.com/mlueders)
+- [**@ruurd** Ruurd Pels](https://github.com/ruurd)
 - [**@Sheigutn** Florian Böhm](https://github.com/Sheigutn)
 - [**@siosio** siosio](https://github.com/siosio)
 - [**@Siriah** Iris Hupkens](https://github.com/Siriah)
@@ -134,6 +141,7 @@ Developed By
 - [**@toadzky** David Harris](https://github.com/toadzky)
 - [**@twillouer** William Delanoue](https://github.com/twillouer)
 - [**@uvpoblotzki** Ulrich von Poblotzki](https://github.com/uvpoblotzki)
+- [**@yiftizur** Yiftach Tzur](https://github.com/yiftizur)
 
 Supporters
 --------
@@ -145,7 +153,7 @@ YourKit, LLC is the creator of [YourKit Java Profiler](https://www.yourkit.com/j
 
 License
 -------
-Copyright (c) 2011-2016 Michail Plushnikov. See the [LICENSE](./LICENSE) file for license rights and limitations (BSD).
+Copyright (c) 2011-2018 Michail Plushnikov. See the [LICENSE](./LICENSE) file for license rights and limitations (BSD).
 
 [badge-gitter-img]:       https://badges.gitter.im/mplushnikov/lombok-intellij-plugin.svg
 [badge-gitter]:           https://gitter.im/mplushnikov/lombok-intellij-plugin

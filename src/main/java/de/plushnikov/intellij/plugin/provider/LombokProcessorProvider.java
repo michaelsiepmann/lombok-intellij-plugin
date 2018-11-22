@@ -73,25 +73,21 @@ public class LombokProcessorProvider {
   }
 
   private <K, V> void putProcessor(final Map<K, Collection<V>> map, final K key, final V value) {
-    Collection<V> valueList = map.get(key);
-    if (null == valueList) {
-      valueList = new HashSet<V>();
-      map.put(key, valueList);
-    }
+    Collection<V> valueList = map.computeIfAbsent(key, k -> new HashSet<V>());
     valueList.add(value);
   }
 
   @NotNull
   public Collection<Processor> getLombokProcessors(@NotNull Class supportedClass) {
     final Collection<Processor> result = lombokTypeProcessors.get(supportedClass);
-    return result == null ? Collections.<Processor>emptySet() : result;
+    return result == null ? Collections.emptySet() : result;
   }
 
   @NotNull
   public Collection<Processor> getProcessors(@NotNull PsiAnnotation psiAnnotation) {
     final String qualifiedName = psiAnnotation.getQualifiedName();
     final Collection<Processor> result = qualifiedName == null ? null : lombokProcessors.get(qualifiedName);
-    return result == null ? Collections.<Processor>emptySet() : result;
+    return result == null ? Collections.emptySet() : result;
   }
 
   private boolean verifyLombokAnnotationPresent(@NotNull PsiClass psiClass) {

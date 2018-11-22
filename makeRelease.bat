@@ -1,15 +1,17 @@
 @ECHO OFF
 
-SET pluginVersion=0.17
+SET pluginVersion=0.23
 
-for %%X in (2017.2 2017.2.6 2017.3 2017.3.1 2017.3.2 2017.3.3 2017.3.4) do call :buildPlugin %%X
+for %%X in (2018.1 2018.2 183.2153.8) do call :buildPlugin %%X
+ECHO All Done
+
+echo.&pause&goto:eof
 
 :buildPlugin
 SETLOCAL
 echo Called with %1
 SET IDEA_VERSION=%1
 call gradlew clean
-call gradlew buildPlugin check
-call gradlew publishPlugin
-copy build\distributions\lombok-plugin-%pluginVersion%.zip distro\lombok-plugin-%pluginVersion%-%1.zip
+call gradlew build || echo ERROR && exit /b
+xcopy build\distributions\lombok-plugin-%pluginVersion%.zip distro\lombok-plugin-%pluginVersion%-%1.zip*
 ENDLOCAL & SET result=%retval%

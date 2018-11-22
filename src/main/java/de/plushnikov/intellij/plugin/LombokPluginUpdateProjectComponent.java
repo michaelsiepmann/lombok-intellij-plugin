@@ -1,27 +1,18 @@
 package de.plushnikov.intellij.plugin;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationGroup;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.notification.*;
+import com.intellij.openapi.components.AbstractProjectComponent;
+import com.intellij.openapi.project.Project;
+import de.plushnikov.intellij.plugin.settings.LombokSettings;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Shows update notification
  */
-public class LombokPluginUpdateProjectComponent implements ProjectComponent {
-  private LombokPluginApplicationComponent application;
+public class LombokPluginUpdateProjectComponent extends AbstractProjectComponent {
 
-  @Override
-  public void initComponent() {
-    application = LombokPluginApplicationComponent.getInstance();
-  }
-
-  @Override
-  public void disposeComponent() {
+  protected LombokPluginUpdateProjectComponent(Project project) {
+    super(project);
   }
 
   @NotNull
@@ -32,8 +23,10 @@ public class LombokPluginUpdateProjectComponent implements ProjectComponent {
 
   @Override
   public void projectOpened() {
-    if (application.isUpdated() && !application.isUpdateNotificationShown()) {
-      application.setUpdateNotificationShown(true);
+    final LombokSettings settings = LombokSettings.getInstance();
+    boolean updated = !Version.PLUGIN_VERSION.equals(settings.getVersion());
+    if (updated) {
+      settings.setVersion(Version.PLUGIN_VERSION);
 
       NotificationGroup group = new NotificationGroup(Version.PLUGIN_NAME, NotificationDisplayType.STICKY_BALLOON, true);
       Notification notification = group.createNotification(
@@ -43,12 +36,8 @@ public class LombokPluginUpdateProjectComponent implements ProjectComponent {
         new NotificationListener.UrlOpeningListener(false)
       );
 
-      Notifications.Bus.notify(notification);
+      Notifications.Bus.notify(notification, myProject);
     }
   }
 
-  @Override
-  public void projectClosed() {
-
-  }
 }

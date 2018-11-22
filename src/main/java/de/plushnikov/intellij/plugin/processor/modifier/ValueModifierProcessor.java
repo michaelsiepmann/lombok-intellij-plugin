@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 /**
+ * Processor for {@literal @Value} feature of Lombok.
  * @author Alexej Kubarev
  */
 public class ValueModifierProcessor implements ModifierProcessor {
@@ -30,11 +31,13 @@ public class ValueModifierProcessor implements ModifierProcessor {
     PsiClass searchableClass = PsiTreeUtil.getParentOfType(modifierList, PsiClass.class, true);
 
     return null != searchableClass && PsiAnnotationSearchUtil.isAnnotatedWith(searchableClass, lombok.Value.class, lombok.experimental.Value.class);
-
   }
 
   @Override
   public void transformModifiers(@NotNull PsiModifierList modifierList, @NotNull final Set<String> modifiers) {
+    if (modifiers.contains(PsiModifier.STATIC)) {
+      return; // skip static fields
+    }
 
     final PsiModifierListOwner parentElement = PsiTreeUtil.getParentOfType(modifierList, PsiModifierListOwner.class, false);
     if (null != parentElement) {

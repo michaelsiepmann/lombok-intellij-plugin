@@ -22,6 +22,7 @@ import de.plushnikov.intellij.plugin.util.PsiAnnotationSearchUtil;
 import de.plushnikov.intellij.plugin.util.PsiClassUtil;
 import de.plushnikov.intellij.plugin.util.PsiMethodUtil;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -119,7 +120,8 @@ public class WitherFieldProcessor extends AbstractFieldProcessor {
 
   @SuppressWarnings("deprecation")
   public boolean validConstructor(@NotNull PsiClass psiClass, @NotNull ProblemBuilder builder) {
-    if (PsiAnnotationSearchUtil.isAnnotatedWith(psiClass, AllArgsConstructor.class, Value.class, lombok.experimental.Value.class)) {
+    if (PsiAnnotationSearchUtil.isAnnotatedWith(psiClass, AllArgsConstructor.class, Value.class, lombok.experimental.Value.class,
+      Builder.class, lombok.experimental.Builder.class)) {
       return true;
     }
 
@@ -206,12 +208,8 @@ public class WitherFieldProcessor extends AbstractFieldProcessor {
   @NotNull
   private PsiCodeBlock createCodeBlock(@NotNull PsiField psiField, PsiClass psiFieldContainingClass, PsiType returnType, String psiFieldName) {
     final String blockText;
-    if (isShouldGenerateFullBodyBlock()) {
-      final String paramString = getConstructorCall(psiField, psiFieldContainingClass);
-      blockText = String.format("return this.%s == %s ? this : new %s(%s);", psiFieldName, psiFieldName, returnType.getCanonicalText(), paramString);
-    } else {
-      blockText = "return null;";
-    }
+    final String paramString = getConstructorCall(psiField, psiFieldContainingClass);
+    blockText = String.format("return this.%s == %s ? this : new %s(%s);", psiFieldName, psiFieldName, returnType.getCanonicalText(), paramString);
     return PsiMethodUtil.createCodeBlockFromText(blockText, psiFieldContainingClass);
   }
 

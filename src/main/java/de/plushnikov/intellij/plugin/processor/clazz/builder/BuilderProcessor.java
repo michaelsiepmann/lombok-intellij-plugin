@@ -32,6 +32,9 @@ import java.util.List;
  */
 public class BuilderProcessor extends AbstractClassProcessor {
 
+  private static final String SINGULAR_CLASS = Singular.class.getName();
+  private static final String BUILDER_DEFAULT_CLASS = Builder.Default.class.getName().replace("$", ".");
+
   private final BuilderHandler builderHandler;
   private final AllArgsConstructorProcessor allArgsConstructorProcessor;
 
@@ -51,18 +54,14 @@ public class BuilderProcessor extends AbstractClassProcessor {
   @Override
   public Collection<PsiAnnotation> collectProcessedAnnotations(@NotNull PsiClass psiClass) {
     final Collection<PsiAnnotation> result = super.collectProcessedAnnotations(psiClass);
-    for (PsiField psiField : PsiClassUtil.collectClassFieldsIntern(psiClass)) {
-      PsiAnnotation psiAnnotation = PsiAnnotationSearchUtil.findAnnotation(psiField, Singular.class);
-      if (null != psiAnnotation) {
-        result.add(psiAnnotation);
-      }
-    }
+    addFieldsAnnotation(result, psiClass, SINGULAR_CLASS, BUILDER_DEFAULT_CLASS);
     return result;
   }
 
   @Override
   protected boolean validate(@NotNull PsiAnnotation psiAnnotation, @NotNull PsiClass psiClass, @NotNull ProblemBuilder builder) {
-    return builderHandler.validate(psiClass, psiAnnotation, builder);
+    // we skip validation here, bacause it will be validated by other BuilderClassProcessor
+    return true;//builderHandler.validate(psiClass, psiAnnotation, builder);
   }
 
   protected void generatePsiElements(@NotNull PsiClass psiClass, @NotNull PsiAnnotation psiAnnotation, @NotNull List<? super PsiElement> target) {
@@ -74,15 +73,17 @@ public class BuilderProcessor extends AbstractClassProcessor {
       }
     }
 
-    final String builderClassName = builderHandler.getBuilderClassName(psiClass, psiAnnotation);
-    PsiClass builderClass = PsiClassUtil.getInnerClassInternByName(psiClass, builderClassName);
+    PsiClass builderClass = builderHandler.getExistInnerBuilderClass(psiClass, null, psiAnnotation).orElse(null);
     if (null == builderClass) {
+      // have to create full class (with all methods) here, or auto completion doesn't work
       builderClass = builderHandler.createBuilderClass(psiClass, psiAnnotation);
     }
 
-    builderHandler.createBuilderMethodIfNecessary(target, psiClass, null, builderClass, psiAnnotation);
+    builderHandler.createBuilderMethodIfNecessary(psiClass, null, builderClass, psiAnnotation)
+      .ifPresent(target::add);
 
-    builderHandler.createToBuilderMethodIfNecessary(target, psiClass, null, builderClass, psiAnnotation);
+    builderHandler.createToBuilderMethodIfNecessary(psiClass, null, builderClass, psiAnnotation)
+      .ifPresent(target::add);
   }
 
   @Override
